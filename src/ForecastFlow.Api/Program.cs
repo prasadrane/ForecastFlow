@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ForecastFlow.Api.Data;
 using ForecastFlow.Api.Data.Repository;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Configuration
 if (builder.Environment.IsProduction())
 {
     var secretName = "ForecastFlow_JwtKey";
-    var region = "us-east-1"; // Change to your AWS region
+    var region = "us-east-1";
 
     var client = new AmazonSecretsManagerClient(Amazon.RegionEndpoint.GetBySystemName(region));
     var request = new GetSecretValueRequest { SecretId = secretName };
@@ -32,7 +33,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Register DbContext and repositories
-builder.Services.AddScoped<ApplicationDbContext>();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AppUserRepository>();
 builder.Services.AddScoped<AppTaskRepository>();
 
