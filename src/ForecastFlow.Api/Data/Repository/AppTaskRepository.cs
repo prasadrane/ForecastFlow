@@ -3,11 +3,11 @@ using ForecastFlow.Core.Models;
 
 namespace ForecastFlow.Api.Data.Repository
 {
-    public class TaskRepository
+    public class AppTaskRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public TaskRepository(ApplicationDbContext context)
+        public AppTaskRepository(ApplicationDbContext context)
         {
             _context = context;
         }
