@@ -18,6 +18,17 @@
   font-size: 1.5rem;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-greeting {
+  font-size: 0.9rem;
+  color: #dee2e6;
+}
+
 .logout-btn {
   background-color: #dc3545;
   color: white;
@@ -54,6 +65,12 @@
   font-size: 1.1rem;
 }
 
+.loading-spinner {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
 .dashboard-widgets {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -78,5 +95,97 @@
 .widget p {
   color: #6c757d;
   margin: 0;
+}
+
+.no-data {
   font-style: italic;
+  color: #6c757d;
+}
+
+.task-item, .forecast-item {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.task-item:last-child, .forecast-item:last-child {
+  border-bottom: none;
+}
+
+.task-item h4, .forecast-item h4 {
+  margin: 0 0 0.5rem 0;
+  color: #343a40;
+  font-size: 1rem;
+}
+
+.task-item p, .forecast-item p {
+  margin: 0 0 0.5rem 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.task-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-in-progress {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-unknown {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.forecast-accuracy {
+  font-size: 0.8rem;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.action-btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background-color: #0056b3;
+}
+
+.action-btn.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.action-btn.secondary:hover {
+  background-color: #545b62;
 }

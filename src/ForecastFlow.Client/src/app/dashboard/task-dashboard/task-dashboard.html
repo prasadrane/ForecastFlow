@@ -1,7 +1,10 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <h1>ForecastFlow Dashboard</h1>
-    <button class="logout-btn" (click)="onLogout()">Logout</button>
+    <div class="header-actions">
+      <span *ngIf="userInfo" class="user-greeting">Welcome, {{ userInfo.username || userInfo.name }}</span>
+      <button class="logout-btn" (click)="onLogout()">Logout</button>
+    </div>
   </header>
   
   <main class="dashboard-content">
@@ -9,17 +12,52 @@
       <h2>Welcome to your Task Dashboard</h2>
       <p>Here you can manage your forecasting tasks and projects.</p>
     </div>
+
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Loading dashboard data...</p>
+    </div>
     
-    <!-- Add your dashboard content here -->
-    <div class="dashboard-widgets">
+    <!-- Dashboard content -->
+    <div class="dashboard-widgets" *ngIf="!isLoading">
       <div class="widget">
         <h3>Recent Tasks</h3>
-        <p>No tasks available yet.</p>
+        <div *ngIf="tasks.length > 0; else noTasks">
+          <div *ngFor="let task of tasks" class="task-item">
+            <h4>{{ task.title || task.name }}</h4>
+            <p>{{ task.description || 'No description available' }}</p>
+            <span class="task-status" [class]="'status-' + (task.status || 'unknown').toLowerCase()">
+              {{ task.status || 'Unknown' }}
+            </span>
+          </div>
+        </div>
+        <ng-template #noTasks>
+          <p class="no-data">No tasks available yet.</p>
+        </ng-template>
       </div>
       
       <div class="widget">
-        <h3>Forecasts</h3>
-        <p>No forecasts available yet.</p>
+        <h3>Recent Forecasts</h3>
+        <div *ngIf="forecasts.length > 0; else noForecasts">
+          <div *ngFor="let forecast of forecasts" class="forecast-item">
+            <h4>{{ forecast.title || forecast.name }}</h4>
+            <p>{{ forecast.description || 'No description available' }}</p>
+            <span class="forecast-accuracy" *ngIf="forecast.accuracy">
+              Accuracy: {{ forecast.accuracy }}%
+            </span>
+          </div>
+        </div>
+        <ng-template #noForecasts>
+          <p class="no-data">No forecasts available yet.</p>
+        </ng-template>
+      </div>
+
+      <div class="widget">
+        <h3>Quick Actions</h3>
+        <div class="action-buttons">
+          <button class="action-btn primary">Create New Task</button>
+          <button class="action-btn secondary">Generate Forecast</button>
+          <button class="action-btn secondary">View Reports</button>
+        </div>
       </div>
     </div>
   </main>

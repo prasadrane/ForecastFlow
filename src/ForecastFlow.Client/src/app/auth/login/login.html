@@ -32,8 +32,9 @@
       <button 
         type="submit" 
         class="login-btn" 
-        [disabled]="!loginForm.form.valid">
-        Login
+        [disabled]="!loginForm.form.valid || isLoading">
+        <span *ngIf="isLoading">Logging in...</span>
+        <span *ngIf="!isLoading">Login</span>
       </button>
     </form>
   </div>
