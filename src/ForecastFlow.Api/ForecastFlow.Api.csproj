@@ -15,4 +15,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ForecastFlow.Core\ForecastFlow.Core.csproj" />
+  </ItemGroup>
+
 </Project>
