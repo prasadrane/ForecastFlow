@@ -4,6 +4,22 @@
 ## Get latest from `dotnet new gitignore`
 
 # dotenv files
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.bak
+*.log
+*.ncb
+*.opendb
+*.vcproj.*.filters
+*.vcxproj.*.filters
+*.sln.docstates
+
+# Build artifacts
+bin/
+obj/
 .env
 
 # User-specific files
