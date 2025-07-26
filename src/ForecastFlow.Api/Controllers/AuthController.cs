@@ -32,6 +32,30 @@ namespace ForecastFlow.Api.Controllers
             return Ok(new { token });
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] UserForRegisterDto dto)
+        {
+            // Check if username already exists
+            var existingUser = await _userRepository.GetByUsernameAsync(dto.Username);
+            if (existingUser != null)
+                return BadRequest("Username is already taken.");
+
+            // Hash password and create salt
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            var user = new AppUser
+            {
+                Username = dto.Username,
+                Email = dto.Email,
+                PasswordSalt = hmac.Key,
+                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(dto.Password)),
+                CreatedAt = DateTime.UtcNow,
+                IsActive = true
+            };
+
+            await _userRepository.AddAsync(user);
+            return Ok(new { message = "User registered successfully." });
+        }
+
         private string GenerateJwtToken(AppUser user)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
@@ -66,6 +90,13 @@ namespace ForecastFlow.Api.Controllers
     public class LoginDto
     {
         public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
+    public class UserForRegisterDto
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
 }
