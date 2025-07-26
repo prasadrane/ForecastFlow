@@ -542,3 +542,4 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+src/ForecastFlow.Api/appsettings.Secrets.json

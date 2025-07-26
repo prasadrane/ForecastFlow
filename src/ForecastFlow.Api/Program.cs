@@ -1,3 +1,5 @@
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -5,6 +7,24 @@ using ForecastFlow.Api.Data;
 using ForecastFlow.Api.Data.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load appsettings.Secrets.json for local dev
+builder.Configuration
+    .AddJsonFile("appsettings.Secrets.json", optional: true, reloadOnChange: true);
+
+// Retrieve JWT key from AWS Secrets Manager if in production
+if (builder.Environment.IsProduction())
+{
+    var secretName = "ForecastFlow_JwtKey";
+    var region = "us-east-1"; // Change to your AWS region
+
+    var client = new AmazonSecretsManagerClient(Amazon.RegionEndpoint.GetBySystemName(region));
+    var request = new GetSecretValueRequest { SecretId = secretName };
+    var response = await client.GetSecretValueAsync(request);
+    var jwtKey = response.SecretString;
+
+    builder.Configuration["Jwt:Key"] = jwtKey;
+}
 
 // Add services to the container.
 builder.Services.AddControllers();
