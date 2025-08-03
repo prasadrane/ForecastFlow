@@ -208,16 +208,22 @@ npm run build
 
 ## 🚀 Deployment
 
-### Terraform Infrastructure
+### AWS Infrastructure
 
-*[Terraform deployment instructions to be added]*
+The complete AWS infrastructure is defined in the `Infrastructure/` folder using Terraform.
+
+**Quick Start:**
+```bash
+cd Infrastructure
+./deploy.sh dev us-east-1
+```
+
+For detailed deployment instructions, see [Infrastructure/DEPLOYMENT.md](Infrastructure/DEPLOYMENT.md).
 
 The infrastructure includes:
-- AWS Lambda functions for weather processing
-- SQS queues for asynchronous messaging
-- RDS instance for production database
-- Application Load Balancer for high availability
-- CloudWatch for monitoring and logging
+- **Public**: Angular SPA (S3 + CloudFront), .NET API (ECS + ALB)  
+- **Private**: AWS Lambda, SQS queues, RDS SQL Server
+- **Cost-optimized**: Uses free-tier eligible services where possible (~$50/month)
 
 ### Manual Deployment Steps
 
