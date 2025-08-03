@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForecastFlow.Core", "Foreca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForecastFlow.Lambda", "ForecastFlow.Lambda\ForecastFlow.Lambda.csproj", "{A1B2C3D4-5678-9012-3456-789012345678}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForecastFlow.Tests.Unit", "ForecastFlow.Tests.Unit\ForecastFlow.Tests.Unit.csproj", "{4611C287-D099-4C41-AF67-AF1DDAB2A71A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{A1B2C3D4-5678-9012-3456-789012345678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1B2C3D4-5678-9012-3456-789012345678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1B2C3D4-5678-9012-3456-789012345678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4611C287-D099-4C41-AF67-AF1DDAB2A71A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4611C287-D099-4C41-AF67-AF1DDAB2A71A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4611C287-D099-4C41-AF67-AF1DDAB2A71A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4611C287-D099-4C41-AF67-AF1DDAB2A71A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

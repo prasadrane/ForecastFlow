@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ForecastFlow.Core.Models;
+using ForecastFlow.Core.Interfaces;
 
 namespace ForecastFlow.Api.Data.Repository
 {
-    public class AppTaskRepository
+    public class AppTaskRepository : IAppTaskRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -20,6 +21,11 @@ namespace ForecastFlow.Api.Data.Repository
         public async Task<AppTask?> GetByIdAsync(int id)
         {
             return await _context.Tasks.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<AppTask>> GetByUserIdAsync(int userId)
+        {
+            return await _context.Tasks.Where(t => t.UserId == userId).ToListAsync();
         }
 
         public async Task AddAsync(AppTask task)

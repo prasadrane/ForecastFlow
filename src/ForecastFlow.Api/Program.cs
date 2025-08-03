@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ForecastFlow.Api.Data;
 using ForecastFlow.Api.Data.Repository;
+using ForecastFlow.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,9 +23,9 @@ if (builder.Environment.IsProduction())
     var client = new AmazonSecretsManagerClient(Amazon.RegionEndpoint.GetBySystemName(region));
     var request = new GetSecretValueRequest { SecretId = secretName };
     var response = await client.GetSecretValueAsync(request);
-    var jwtKey = response.SecretString;
+    var secretJwtKey = response.SecretString;
 
-    builder.Configuration["Jwt:Key"] = jwtKey;
+    builder.Configuration["Jwt:Key"] = secretJwtKey;
 }
 
 // Add services to the container.
@@ -35,12 +36,17 @@ builder.Services.AddSwaggerGen();
 // Register DbContext and repositories
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<AppUserRepository>();
-builder.Services.AddScoped<AppTaskRepository>();
+builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
+builder.Services.AddScoped<IAppTaskRepository, AppTaskRepository>();
 
 // JWT Authentication configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+var jwtKey = jwtSettings["Key"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT key is not configured. Please set Jwt:Key in configuration.");
+}
+var key = Encoding.UTF8.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(options =>
 {
