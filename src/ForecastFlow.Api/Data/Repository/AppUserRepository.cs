@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using ForecastFlow.Core.Models;
+using ForecastFlow.Core.Interfaces;
 
 namespace ForecastFlow.Api.Data.Repository
 {
-    public class AppUserRepository
+    public class AppUserRepository : IAppUserRepository
     {
         private readonly ApplicationDbContext _context;
 

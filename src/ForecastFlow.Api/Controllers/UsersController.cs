@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ForecastFlow.Api.Data.Repository;
+using ForecastFlow.Core.Interfaces;
 using ForecastFlow.Core.Models;
 using System.Collections.Generic;
 
@@ -10,9 +10,9 @@ namespace ForecastFlow.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AppUserRepository _userRepository;
+        private readonly IAppUserRepository _userRepository;
 
-        public UsersController(AppUserRepository userRepository)
+        public UsersController(IAppUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

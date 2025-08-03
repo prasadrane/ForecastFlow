@@ -20,29 +20,35 @@ ForecastFlow revolutionizes daily planning by seamlessly combining weather forec
 - **🔔 Weather Alerts**: Automatic notifications when weather affects planned activities
 - **🔐 Secure Authentication**: JWT-based user authentication and authorization
 
-<!-- Architecture Diagram Placeholder -->
+<!-- Architecture Diagram -->
 ## 🏗️ Architecture
 
-*[Architecture diagram to be added]*
+For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-The application follows a modern microservices architecture with clear separation of concerns:
+The application follows a modern clean architecture pattern with clear separation of concerns:
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Angular SPA   │────│  .NET Web API   │────│   SQL Server    │
 │   (Frontend)    │    │   (Backend)     │    │   (Database)    │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │
-         │              ┌─────────────────┐
-         │              │   AWS Lambda    │
-         │              │  (Processing)   │
-         │              └─────────────────┘
-         │                       │
-┌─────────────────┐    ┌─────────────────┐
-│  Weather API    │    │    AWS SQS      │
-│ (OpenWeather)   │    │  (Messaging)    │
-└─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │              ┌─────────────────┐              │
+         │              │   AWS Lambda    │              │
+         │              │  (Processing)   │              │
+         │              └─────────────────┘              │
+         │                       │                       │
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Weather API    │    │    AWS SQS      │    │  Secrets Mgr    │
+│ (OpenWeather)   │    │  (Messaging)    │    │ (Configuration) │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+
+### Key Architectural Decisions
+- **Repository Pattern**: Abstracted data access with interfaces for better testability
+- **JWT Authentication**: Stateless authentication for scalability
+- **Async Processing**: Weather data processing decoupled via AWS Lambda/SQS
+- **Clean Separation**: Frontend, API, and data layers with clear boundaries
 
 ## 🛠️ Tech Stack
 
@@ -71,9 +77,13 @@ The application follows a modern microservices architecture with clear separatio
 
 ## 🚀 Getting Started
 
+For detailed setup instructions, see [GETTING-STARTED.md](GETTING-STARTED.md).
+
+### Quick Start
+
 ### Prerequisites
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) *(Note: Project targets .NET 9.0 but can be built with .NET 8.0+ by updating target framework)*
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [Node.js 20+](https://nodejs.org/) and npm
 - [SQL Server](https://www.microsoft.com/en-us/sql-server) (LocalDB or full instance)
 - [AWS CLI](https://aws.amazon.com/cli/) (for deployment)
@@ -81,64 +91,44 @@ The application follows a modern microservices architecture with clear separatio
 
 ### 🔧 Backend Setup
 
-1. **Clone the repository**
+1. **Clone and restore packages**
    ```bash
    git clone https://github.com/prasadrane/ForecastFlow.git
-   cd ForecastFlow
-   ```
-
-2. **Restore .NET packages**
-   ```bash
-   cd src
+   cd ForecastFlow/src
    dotnet restore
    ```
-   
-   *Note: If using .NET 8.0 SDK, you may need to update the target framework in the `.csproj` files from `net9.0` to `net8.0`*
 
-3. **Configure database connection**
-   Update `appsettings.json` in `ForecastFlow.Api`:
-   ```json
-   {
-     "ConnectionStrings": {
-       "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ForecastFlowDb;Trusted_Connection=true;MultipleActiveResultSets=true"
-     }
-   }
-   ```
-
-4. **Run database migrations**
+2. **Configure database and run migrations**
    ```bash
    cd ForecastFlow.Api
    dotnet ef database update
    ```
 
-5. **Set up OpenWeatherMap API key**
+3. **Set up configuration**
    ```bash
    dotnet user-secrets set "OpenWeatherMap:ApiKey" "your-api-key-here"
+   dotnet user-secrets set "Jwt:Key" "your-super-secret-jwt-key-here"
    ```
 
-6. **Run the API**
+4. **Run the API**
    ```bash
-   dotnet run --project ForecastFlow.Api
+   dotnet run
    ```
-   The API will be available at `https://localhost:7089`
+   API available at `https://localhost:7089`
 
 ### 🎨 Frontend Setup
 
-1. **Navigate to the client directory**
+1. **Navigate and install dependencies**
    ```bash
    cd src/ForecastFlow.Client
-   ```
-
-2. **Install dependencies**
-   ```bash
    npm install
    ```
 
-3. **Start the development server**
+2. **Start the development server**
    ```bash
    npm start
    ```
-   The application will be available at `http://localhost:4200`
+   Application available at `http://localhost:4200`
 
 ### 📱 Application Demo
 
@@ -176,7 +166,7 @@ dotnet test
 **Frontend Tests**
 ```bash
 cd src/ForecastFlow.Client
-npm test
+npm test -- --watch=false --browsers=ChromeHeadless
 ```
 
 ### Code Quality
@@ -211,31 +201,26 @@ npm run build
 ### AWS Infrastructure
 
 The complete AWS infrastructure is defined in the `Infrastructure/` folder using Terraform.
+For detailed deployment instructions, see [GETTING-STARTED.md](GETTING-STARTED.md#aws-deployment).
 
 **Quick Start:**
 ```bash
 cd Infrastructure
+cp terraform.tfvars.example terraform.tfvars
+# Edit terraform.tfvars with your values
+terraform init
+terraform plan
+terraform apply
 ./deploy.sh dev us-east-1
 ```
 
-For detailed deployment instructions, see [Infrastructure/DEPLOYMENT.md](Infrastructure/DEPLOYMENT.md).
-
 The infrastructure includes:
-- **Public**: Angular SPA (S3 + CloudFront), .NET API (ECS + ALB)  
-- **Private**: AWS Lambda, SQS queues, RDS SQL Server
+- **Frontend**: Angular SPA (S3 + CloudFront)  
+- **Backend**: .NET API (ECS + ALB)
+- **Database**: SQL Server (RDS)
+- **Processing**: AWS Lambda + SQS
+- **Security**: Secrets Manager + IAM roles
 - **Cost-optimized**: Uses free-tier eligible services where possible (~$50/month)
-
-### Manual Deployment Steps
-
-1. **Deploy Backend to AWS Lambda**
-   ```bash
-   # Instructions coming soon with Terraform setup
-   ```
-
-2. **Deploy Frontend to S3/CloudFront**
-   ```bash
-   # Instructions coming soon with Terraform setup
-   ```
 
 ## 🎓 Lessons Learned
 

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using ForecastFlow.Api.Data.Repository;
+using ForecastFlow.Core.Interfaces;
 using ForecastFlow.Core.Models;
 using System.Collections.Generic;
 namespace ForecastFlow.Api.Controllers
@@ -10,10 +10,10 @@ namespace ForecastFlow.Api.Controllers
     [Route("api/[controller]")]
     public class TasksController : ControllerBase
     {
-        private readonly AppTaskRepository _taskRepository;
-        private readonly AppUserRepository _userRepository;
+        private readonly IAppTaskRepository _taskRepository;
+        private readonly IAppUserRepository _userRepository;
 
-        public TasksController(AppTaskRepository taskRepository, AppUserRepository userRepository)
+        public TasksController(IAppTaskRepository taskRepository, IAppUserRepository userRepository)
         {
             _taskRepository = taskRepository;
             _userRepository = userRepository;
@@ -28,8 +28,8 @@ namespace ForecastFlow.Api.Controllers
             if (userId == null)
                 return Unauthorized();
 
-            var tasks = await _taskRepository.GetAllAsync();
-            return Ok(tasks.Where(t => t.UserId == userId));
+            var tasks = await _taskRepository.GetByUserIdAsync(userId.Value);
+            return Ok(tasks);
         }
 
         // GET: api/tasks/{id}

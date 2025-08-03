@@ -3,7 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ForecastFlow.Api.Data.Repository;
+using ForecastFlow.Core.Interfaces;
 using ForecastFlow.Core.Models;
 
 namespace ForecastFlow.Api.Controllers
@@ -12,10 +12,10 @@ namespace ForecastFlow.Api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AppUserRepository _userRepository;
+        private readonly IAppUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthController(AppUserRepository userRepository, IConfiguration configuration)
+        public AuthController(IAppUserRepository userRepository, IConfiguration configuration)
         {
             _userRepository = userRepository;
             _configuration = configuration;
@@ -59,7 +59,13 @@ namespace ForecastFlow.Api.Controllers
         private string GenerateJwtToken(AppUser user)
         {
             var jwtSettings = _configuration.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var jwtKey = jwtSettings["Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new InvalidOperationException("JWT key is not configured.");
+            }
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -68,11 +74,17 @@ namespace ForecastFlow.Api.Controllers
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
             };
 
+            var expiresInMinutesStr = jwtSettings["ExpiresInMinutes"];
+            if (string.IsNullOrEmpty(expiresInMinutesStr) || !double.TryParse(expiresInMinutesStr, out var expiresInMinutes))
+            {
+                expiresInMinutes = 60; // Default to 60 minutes
+            }
+
             var token = new JwtSecurityToken(
                 issuer: jwtSettings["Issuer"],
                 audience: jwtSettings["Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpiresInMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(expiresInMinutes),
                 signingCredentials: creds
             );
 
