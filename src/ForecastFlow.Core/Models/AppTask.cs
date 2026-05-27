@@ -18,4 +18,5 @@ public class AppTask
     public int? Priority { get; set; }
     public string? Category { get; set; }
     public DateTime? ReminderDateTime { get; set; }
+    public string? SuggestionsJson { get; set; }
 }

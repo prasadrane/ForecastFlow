@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ForecastFlow.Core.Interfaces;
 using ForecastFlow.Core.Models;
+using ForecastFlow.Lambda;
 using System.Collections.Generic;
+using System.Text.Json;
+
 namespace ForecastFlow.Api.Controllers
 {
     [ApiController]
@@ -12,11 +15,13 @@ namespace ForecastFlow.Api.Controllers
     {
         private readonly IAppTaskRepository _taskRepository;
         private readonly IAppUserRepository _userRepository;
+        private readonly IMessageQueueService _queueService;
 
-        public TasksController(IAppTaskRepository taskRepository, IAppUserRepository userRepository)
+        public TasksController(IAppTaskRepository taskRepository, IAppUserRepository userRepository, IMessageQueueService queueService)
         {
             _taskRepository = taskRepository;
             _userRepository = userRepository;
+            _queueService = queueService;
         }
 
         // GET: api/tasks
@@ -75,6 +80,23 @@ namespace ForecastFlow.Api.Controllers
             };
 
             await _taskRepository.AddAsync(task);
+
+            // Trigger weather processing via mock SQS
+            await _queueService.SendMessageAsync(new WeatherProcessingMessage
+            {
+                MessageType = "TaskSuggestion",
+                UserId = task.UserId.ToString(),
+                Location = task.LocationName,
+                Timestamp = DateTime.UtcNow,
+                Data = new Dictionary<string, object>
+                {
+                    { "TaskId", task.Id },
+                    { "Latitude", task.Latitude },
+                    { "Longitude", task.Longitude },
+                    { "TaskDateTime", task.TaskDateTime }
+                }
+            });
+
             return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
         }
 
@@ -124,6 +146,22 @@ namespace ForecastFlow.Api.Controllers
             return NoContent();
         }
 
+        // PATCH: api/tasks/{id}/suggestions
+        [HttpPatch("{id}/suggestions")]
+        [AllowAnonymous] // Allow Lambda to call this without JWT for now, or use a shared secret
+        public async Task<IActionResult> UpdateSuggestions(int id, [FromBody] SuggestionsUpdateDto dto)
+        {
+            var task = await _taskRepository.GetByIdAsync(id);
+            if (task == null)
+                return NotFound();
+
+            task.SuggestionsJson = JsonSerializer.Serialize(dto.Suggestions);
+            task.UpdatedAt = DateTime.UtcNow;
+
+            await _taskRepository.UpdateAsync(task);
+            return NoContent();
+        }
+
         // Helper method to get authenticated user's ID (assumes claim "sub" or "id" is present)
         private int? GetAuthenticatedUserId()
         {
@@ -133,6 +171,11 @@ namespace ForecastFlow.Api.Controllers
                 return userId;
             return null;
         }
+    }
+
+    public class SuggestionsUpdateDto
+    {
+        public List<string> Suggestions { get; set; } = new();
     }
 
     // DTO for task creation and update
@@ -148,5 +191,6 @@ namespace ForecastFlow.Api.Controllers
         public int? Priority { get; set; }
         public string? Category { get; set; }
         public DateTime? ReminderDateTime { get; set; }
+        public string? SuggestionsJson { get; set; }
     }
 }

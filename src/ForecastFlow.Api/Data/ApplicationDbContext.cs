@@ -39,7 +39,15 @@ namespace ForecastFlow.Api.Data
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
                 IConfiguration configuration = builder.Build();
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                if (connectionString != null && connectionString.Contains(".db"))
+                {
+                    optionsBuilder.UseSqlite(connectionString);
+                }
+                else
+                {
+                    optionsBuilder.UseSqlServer(connectionString);
+                }
             }
         }
     }

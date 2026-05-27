@@ -4,6 +4,7 @@ using Amazon.SQS;
 using Amazon.SecretsManager;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using ForecastFlow.Core.Models;
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -117,13 +118,4 @@ public class WeatherProcessingFunction
         await Task.Delay(100); // Simulate processing time
         _logger.LogInformation("Task suggestion processed successfully");
     }
-}
-
-public class WeatherProcessingMessage
-{
-    public string MessageType { get; set; } = string.Empty;
-    public string UserId { get; set; } = string.Empty;
-    public string Location { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; }
-    public Dictionary<string, object> Data { get; set; } = new();
 }
