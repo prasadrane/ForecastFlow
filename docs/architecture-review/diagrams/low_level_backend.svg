@@ -57,6 +57,10 @@
   <line x1="450" y1="400" x2="450" y2="480" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
   <line x1="250" y1="360" x2="350" y2="360" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
 
+  <!-- HTTP Callback from Processor to Controller -->
+  <path d="M150 420 L150 450 L30 450 L30 130 L50 130" stroke="#333" stroke-width="1.5" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="3" />
+  <text x="35" y="280" font-family="Arial" font-size="10" text-anchor="middle" transform="rotate(-90, 35, 280)">HTTP PATCH</text>
+
   <text x="290" y="125" font-family="Arial" font-size="10" text-anchor="middle">Uses</text>
   <text x="165" y="240" font-family="Arial" font-size="10" text-anchor="middle">Uses</text>
   <text x="465" y="250" font-family="Arial" font-size="10" text-anchor="middle">Implements</text>

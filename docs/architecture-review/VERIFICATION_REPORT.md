@@ -18,6 +18,7 @@ The infrastructure codebase is well-organized into modules that directly corresp
 ### Findings:
 - **Component Match**: Every major architectural component has a corresponding infrastructure module.
 - **Local vs. Prod Discrepancy**: The codebase correctly distinguishes between local development (Mock SQS, SQLite) and production (AWS SQS, RDS).
+- **Asynchronous Callback Pattern**: The design uses a decoupled pattern where the API pushes to SQS, and the Lambda "calls back" to the API via an HTTP `PATCH` endpoint to update suggestions. This is verified in `WeatherProcessor.cs` and `TasksController.cs`.
 - **Deployment Readiness**: The Terraform modules use placeholders (e.g., `placeholder.zip` for Lambda, sample image for ECS) which is standard for "Infrastructure-First" approaches, expecting the CI/CD pipeline to inject the real artifacts.
 
 ## 3. Security Review
