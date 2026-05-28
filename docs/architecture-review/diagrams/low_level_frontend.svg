@@ -1,0 +1,39 @@
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafafa" />
+  <text x="400" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">Low-Level Design - Frontend (Angular)</text>
+
+  <!-- Components -->
+  <rect x="50" y="80" width="180" height="120" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="2" />
+  <text x="140" y="100" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Components</text>
+  <text x="60" y="130" font-family="Arial" font-size="12">AppComponent</text>
+  <text x="60" y="150" font-family="Arial" font-size="12">DashboardComponent</text>
+  <text x="60" y="170" font-family="Arial" font-size="12">LoginComponent</text>
+
+  <!-- Services -->
+  <rect x="350" y="80" width="180" height="100" rx="5" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2" />
+  <text x="440" y="100" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Services</text>
+  <text x="360" y="130" font-family="Arial" font-size="12">TaskService</text>
+  <text x="360" y="150" font-family="Arial" font-size="12">AuthService</text>
+
+  <!-- Guards/Interceptors -->
+  <rect x="350" y="250" width="180" height="100" rx="5" fill="#e0f2f1" stroke="#009688" stroke-width="2" />
+  <text x="440" y="270" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Infrastructure</text>
+  <text x="360" y="300" font-family="Arial" font-size="12">AuthGuard</text>
+  <text x="360" y="320" font-family="Arial" font-size="12">JwtInterceptor</text>
+
+  <!-- Connectors -->
+  <line x1="230" y1="130" x2="350" y2="130" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="140" y1="200" x2="140" y2="310" stroke="#333" stroke-width="1.5" fill="none" />
+  <line x1="140" y1="310" x2="350" y2="310" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="440" y1="180" x2="440" y2="250" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="4" />
+
+  <text x="290" y="125" font-family="Arial" font-size="10" text-anchor="middle">Uses</text>
+  <text x="250" y="305" font-family="Arial" font-size="10" text-anchor="middle">Protected by</text>
+
+</svg>
