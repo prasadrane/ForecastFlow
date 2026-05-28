@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ForecastFlow.Api.Data;
 using ForecastFlow.Api.Data.Repository;
+using ForecastFlow.Api.Services;
 using ForecastFlow.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,9 +36,22 @@ builder.Services.AddSwaggerGen();
 
 // Register DbContext and repositories
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    if (connectionString != null && connectionString.Contains(".db"))
+    {
+        options.UseSqlite(connectionString);
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
+});
 builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
 builder.Services.AddScoped<IAppTaskRepository, AppTaskRepository>();
+builder.Services.AddSingleton<IMessageQueueService, InMemoryMessageQueueService>();
+builder.Services.AddHostedService<MockSqsBackgroundWorker>();
+builder.Services.AddHttpClient<IWeatherService, OpenWeatherService>();
 
 // JWT Authentication configuration
 var jwtSettings = builder.Configuration.GetSection("Jwt");

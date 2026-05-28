@@ -20,16 +20,19 @@
   },
   "private": true,
   "dependencies": {
+    "@angular/animations": "^21.2.14",
+    "@angular/cdk": "^21.2.13",
     "@angular/common": "^20.1.0",
     "@angular/compiler": "^20.1.0",
     "@angular/core": "^20.1.0",
     "@angular/forms": "^20.1.0",
+    "@angular/material": "^21.2.13",
     "@angular/platform-browser": "^20.1.0",
     "@angular/router": "^20.1.0",
+    "jest-editor-support": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.15.0",
-    "jest-editor-support": "*"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular/build": "^20.1.3",
