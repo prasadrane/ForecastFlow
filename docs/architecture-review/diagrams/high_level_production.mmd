@@ -1,0 +1,28 @@
+graph TD
+    User[User / Browser]
+
+    subgraph "AWS Cloud"
+        CF[CloudFront]
+        S3[S3 Bucket - SPA]
+        ALB[ALB]
+        ECS[ECS Fargate - API]
+        RDS[(RDS SQL Server)]
+        SQS[SQS Queue]
+        Lambda[AWS Lambda - Worker]
+        Secrets[Secrets Manager]
+    end
+
+    Weather[OpenWeatherMap API]
+
+    User <--> CF
+    CF <--> S3
+    User <--> ALB
+    ALB <--> ECS
+    ECS <--> RDS
+    ECS <--> SQS
+    SQS --> Lambda
+    Lambda <--> RDS
+    Lambda --> Weather
+    ECS --> Weather
+    ECS <--> Secrets
+    Lambda <--> Secrets

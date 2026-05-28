@@ -1,0 +1,42 @@
+classDiagram
+    class AppComponent {
+    }
+
+    class DashboardComponent {
+        -TaskService taskService
+        -FormBuilder fb
+        +ngOnInit()
+        +loadTasks()
+        +addTask()
+    }
+
+    class LoginComponent {
+        -AuthService authService
+    }
+
+    class TaskService {
+        -HttpClient http
+        +getAll()
+        +getById(id)
+        +create(task)
+    }
+
+    class AuthService {
+        -HttpClient http
+        +login(creds)
+        +logout()
+    }
+
+    class AuthGuard {
+        -AuthService authService
+    }
+
+    class JwtInterceptor {
+        -AuthService authService
+    }
+
+    DashboardComponent --> TaskService
+    LoginComponent --> AuthService
+    AuthGuard --> AuthService
+    JwtInterceptor --> AuthService
+    TaskService ..> JwtInterceptor : (via HTTP Pipeline)

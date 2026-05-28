@@ -1,0 +1,21 @@
+graph TD
+    User[User / Browser]
+
+    subgraph "Local Development Machine"
+        SPA[Angular SPA :4200]
+        API[.NET API :5089]
+        DB[(SQLite .db)]
+        Queue[In-Memory Queue]
+        Worker[Background Worker]
+    end
+
+    Weather[OpenWeatherMap API]
+
+    User <--> SPA
+    SPA <--> API
+    API <--> DB
+    API --> Queue
+    Queue --> Worker
+    Worker --> Weather
+    Worker --> API
+    API --> Weather

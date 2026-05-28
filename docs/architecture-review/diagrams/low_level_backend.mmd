@@ -1,0 +1,61 @@
+classDiagram
+    class TasksController {
+        -IAppTaskRepository _taskRepository
+        -IAppUserRepository _userRepository
+        -IMessageQueueService _queueService
+        +GetTasks()
+        +GetTask(id)
+        +CreateTask(dto)
+        +UpdateTask(id, dto)
+        +DeleteTask(id)
+        +UpdateSuggestions(id, dto)
+    }
+
+    class IAppTaskRepository {
+        <<interface>>
+        +GetByIdAsync(id)
+        +GetByUserIdAsync(userId)
+        +AddAsync(task)
+        +UpdateAsync(task)
+        +DeleteAsync(id)
+    }
+
+    class AppTaskRepository {
+        -ApplicationDbContext _context
+    }
+
+    class ApplicationDbContext {
+        +DbSet<AppTask> Tasks
+        +DbSet<AppUser> Users
+    }
+
+    class IWeatherService {
+        <<interface>>
+        +GetCurrentWeatherAsync(lat, lon)
+        +GetWeatherForecastAsync(lat, lon)
+    }
+
+    class OpenWeatherService {
+        -HttpClient _httpClient
+    }
+
+    class IMessageQueueService {
+        <<interface>>
+        +SendMessageAsync(message)
+        +ReceiveMessageAsync()
+    }
+
+    class WeatherProcessor {
+        -IWeatherService _weatherService
+        -HttpClient _httpClient
+        +ProcessTaskSuggestionAsync(message)
+    }
+
+    TasksController --> IAppTaskRepository
+    TasksController --> IMessageQueueService
+    AppTaskRepository ..|> IAppTaskRepository
+    AppTaskRepository --> ApplicationDbContext
+    OpenWeatherService ..|> IWeatherService
+    WeatherProcessor --> IWeatherService
+    MockSqsBackgroundWorker --> IMessageQueueService
+    MockSqsBackgroundWorker --> WeatherProcessor

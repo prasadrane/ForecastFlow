@@ -1,0 +1,64 @@
+<svg width="1000" height="700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#fafafa" />
+  <text x="500" y="30" font-family="Arial" font-size="20" font-weight="bold" text-anchor="middle">Low-Level Design - Backend (.NET) Class Relationships</text>
+
+  <!-- Controllers -->
+  <rect x="50" y="80" width="180" height="100" rx="5" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" />
+  <text x="140" y="100" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Controllers</text>
+  <text x="60" y="130" font-family="Arial" font-size="12">TasksController</text>
+  <text x="60" y="150" font-family="Arial" font-size="12">AuthController</text>
+  <text x="60" y="170" font-family="Arial" font-size="12">UsersController</text>
+
+  <!-- Core Interfaces -->
+  <rect x="350" y="80" width="200" height="120" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" />
+  <text x="450" y="100" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Core Interfaces</text>
+  <text x="360" y="130" font-family="Arial" font-size="12">IAppTaskRepository</text>
+  <text x="360" y="150" font-family="Arial" font-size="12">IAppUserRepository</text>
+  <text x="360" y="170" font-family="Arial" font-size="12">IWeatherService</text>
+  <text x="360" y="190" font-family="Arial" font-size="12">IMessageQueueService</text>
+
+  <!-- Core Models -->
+  <rect x="700" y="80" width="180" height="100" rx="5" fill="#fff3e0" stroke="#ef6c00" stroke-width="2" />
+  <text x="790" y="100" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Domain Models</text>
+  <text x="710" y="130" font-family="Arial" font-size="12">AppTask</text>
+  <text x="710" y="150" font-family="Arial" font-size="12">AppUser</text>
+  <text x="710" y="170" font-family="Arial" font-size="12">WeatherProcessingMessage</text>
+
+  <!-- Repositories -->
+  <rect x="350" y="300" width="200" height="100" rx="5" fill="#e1f5fe" stroke="#01579b" stroke-width="2" />
+  <text x="450" y="320" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Repositories (Data)</text>
+  <text x="360" y="350" font-family="Arial" font-size="12">AppTaskRepository</text>
+  <text x="360" y="370" font-family="Arial" font-size="12">AppUserRepository</text>
+
+  <!-- Services -->
+  <rect x="50" y="300" width="200" height="120" rx="5" fill="#f1f8e9" stroke="#558b2f" stroke-width="2" />
+  <text x="150" y="320" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">Services</text>
+  <text x="60" y="350" font-family="Arial" font-size="12">OpenWeatherService</text>
+  <text x="60" y="370" font-family="Arial" font-size="12">MockSqsBackgroundWorker</text>
+  <text x="60" y="390" font-family="Arial" font-size="12">InMemoryMessageQueue</text>
+  <text x="60" y="410" font-family="Arial" font-size="12">WeatherProcessor</text>
+
+  <!-- Database -->
+  <rect x="350" y="480" width="200" height="60" rx="5" fill="#fffde7" stroke="#fbc02d" stroke-width="2" />
+  <text x="450" y="505" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle">ApplicationDbContext</text>
+  <text x="450" y="525" font-family="Arial" font-size="12" text-anchor="middle">(Entity Framework Core)</text>
+
+  <!-- Connectors -->
+  <line x1="230" y1="130" x2="350" y2="130" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="550" y1="130" x2="700" y2="130" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" stroke-dasharray="4" />
+  <line x1="450" y1="200" x2="450" y2="300" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="150" y1="180" x2="150" y2="300" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="450" y1="400" x2="450" y2="480" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+  <line x1="250" y1="360" x2="350" y2="360" stroke="#333" stroke-width="1.5" marker-end="url(#arrowhead)" />
+
+  <text x="290" y="125" font-family="Arial" font-size="10" text-anchor="middle">Uses</text>
+  <text x="165" y="240" font-family="Arial" font-size="10" text-anchor="middle">Uses</text>
+  <text x="465" y="250" font-family="Arial" font-size="10" text-anchor="middle">Implements</text>
+
+</svg>
